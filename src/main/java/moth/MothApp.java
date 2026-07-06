@@ -5,12 +5,14 @@ import moth.controller.handler.HelpHandler;
 import moth.controller.handler.ImageHandler;
 import moth.controller.handler.ShutdownHandler;
 import moth.controller.parser.InputParser;
-import moth.model.command.Command;
 import moth.model.command.CommandResult;
 import moth.model.entity.Session;
-import moth.view.display.HelpDisplay;
 import moth.view.terminal.TerminalInterface;
 import moth.view.terminal.TerminalWriter;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class MothApp {
 
@@ -25,6 +27,7 @@ public class MothApp {
     }
 
     public void run() {
+        printAsciiLogo();
         writer.writeLine("Moth v0.1 - Type 'help' for available commands");
 
         while (session.isRunning()) {
@@ -41,10 +44,24 @@ public class MothApp {
         terminal.close();
     }
 
+    private void printAsciiLogo() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("assets/Asciiart/asciiLogo.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.print(TerminalWriter.ANSI_ORANGE + line + TerminalWriter.ANSI_RESET);
+                System.out.print("\n");
+                System.out.print("\033[1A");
+            }
+            System.out.println();
+        } catch (IOException e) {
+            writer.writeLine("Could not load logo: " + e.getMessage());
+        }
+    }
+
     private CommandHandler resolveHandler(String command) {
         switch (command) {
             case "shutdown": return new ShutdownHandler(session);
-            case "help": return new HelpHandler(new HelpDisplay());
+            case "help": return new HelpHandler(writer);
             case "imgen": return new ImageHandler();
             case "imgde": return new ImageHandler();
             default: return args -> new CommandResult(false, "Unknown command: " + command);

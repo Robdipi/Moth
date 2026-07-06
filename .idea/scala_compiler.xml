@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaCompilerConfiguration">
+    <option name="separateProdTestSources" value="true" />
+    <profile name="sbt 1" modules="moth,moth.main,moth.test,moth_3619,moth_3619.main,moth_3619.test" />
+  </component>
+</project>

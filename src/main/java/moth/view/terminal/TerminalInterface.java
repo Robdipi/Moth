@@ -11,7 +11,7 @@ public class TerminalInterface {
     }
 
     public String readInput() {
-        System.out.print("moth> ");
+        System.out.print(TerminalWriter.ANSI_ORANGE + "moth> " + TerminalWriter.ANSI_RESET);
         return scanner.nextLine();
     }
 
